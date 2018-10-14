@@ -1,0 +1,15 @@
+jwt:
+  expire-time: 3600
+  header: X-API-TOKEN
+  signing-key: BDJvVGFvgDGvHGFVF
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    # Use a strong password in real world
+    password: *unapassoword*
+    url: jdbc:mysql://localhost/letsparty
+    username: letsparty
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+server:
+contextPath: /letsparty
