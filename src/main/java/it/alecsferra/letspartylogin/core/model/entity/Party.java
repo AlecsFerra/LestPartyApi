@@ -25,7 +25,7 @@ public class Party {
 
     @NotNull
     @Column
-    private Date date;
+    private String date;
 
     @ManyToOne
     @NotNull

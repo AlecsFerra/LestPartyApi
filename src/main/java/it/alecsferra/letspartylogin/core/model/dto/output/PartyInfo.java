@@ -7,9 +7,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInfo {
+public class PartyInfo {
 
-    private String username;
     private String id;
+
+    private String title;
+
+    private String description;
+
+    private String date;
+
+    private String creatorId;
 
 }

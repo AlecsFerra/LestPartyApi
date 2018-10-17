@@ -4,7 +4,7 @@ jwt:
   signing-key: BDJvVGFvgDGvHGFVF
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
+    driverClassName: com.mysql.jdbc.Driver
     # Use a strong password in real world
     password: letspartyreturn
     url: jdbc:mysql://localhost:3306/letspartyreturn

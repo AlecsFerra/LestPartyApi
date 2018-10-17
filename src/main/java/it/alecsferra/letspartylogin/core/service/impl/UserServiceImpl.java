@@ -46,20 +46,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResult generateToken(LoginUser loginUser) {
+
         LoginResult result = new LoginResult();
+
         String username = loginUser.getUsername();
+
         result.setUsername(username);
+
         User user = findByUsername(username);
+
         if (user == null) return result;
+
         boolean passwordCheck =
                 passwordEncoder.matches(loginUser.getPassword(), user.getPassword());
+
         if (passwordCheck){
+
             long expDate = System.currentTimeMillis() + expireTime*1000;
             String token = JwtUtils.getToken(username, expDate, signingKey.getBytes());
             result.setToken(token);
             result.setExpireDate(expDate);
+
         }
+
         return result;
+
     }
 
     @Override

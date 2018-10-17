@@ -30,32 +30,46 @@ public class UserController {
 
     @PostMapping("/register")
     public SimpleResult register(@RequestBody @Validated SignUpUser userDto, BindingResult bindingResult) {
+
         SimpleResult result = new SimpleResult();
-        if (bindingResult.hasErrors()){
+
+        if (bindingResult.hasErrors())
             return result;
-        }
+
         User user = modelMapper.map(userDto, User.class);
+
         boolean success = userService.saveUser(user);
+
         if (!success)
             result.setMessage("Username already exists.");
+
         result.setSuccess(success);
+
         return result;
     }
 
     @PostMapping("/login")
     public LoginResult login(@RequestBody @Validated LoginUser loginUser, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()){
+
             LoginResult result = new LoginResult();
             result.setUsername(loginUser.getUsername());
             return result;
+
         }
+
         return userService.generateToken(loginUser);
     }
 
-    @RequestMapping("/my/me")
+    @RequestMapping("/user/me")
     public UserInfo me(){
+
         String username = Utils.getCurrentUsername();
+
         User user = userService.findByUsername(username);
+
         return modelMapper.map(user, UserInfo.class);
+
     }
 }
