@@ -47,4 +47,10 @@ public class PartyServiceImpl implements PartyService {
 
     }
 
+    @Override
+    public Party findById(String id) {
+
+        return repository.findById(id).orElse(null);
+
+    }
 }

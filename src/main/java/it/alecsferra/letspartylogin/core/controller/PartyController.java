@@ -5,16 +5,20 @@ import it.alecsferra.letspartylogin.core.model.dto.input.ThrowParty;
 import it.alecsferra.letspartylogin.core.model.dto.output.PartyInfo;
 import it.alecsferra.letspartylogin.core.model.dto.output.SimpleResult;
 import it.alecsferra.letspartylogin.core.model.entity.Party;
+import it.alecsferra.letspartylogin.core.model.entity.User;
 import it.alecsferra.letspartylogin.core.service.PartyService;
 import it.alecsferra.letspartylogin.core.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/party")
 @RestController
@@ -60,12 +64,28 @@ public class PartyController {
 
         List<PartyInfo> result = new ArrayList<>();
 
-        partyService.findAllByCreatorIdOrderByDate(userService.findByUsername(username).getId())
+        User user = userService.findByUsername(username);
+        if(user == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+
+        partyService.findAllByCreatorIdOrderByDate(user.getId())
                 .stream()
                 .map(x -> modelMapper.map(x, PartyInfo.class))
                 .forEach(x -> result.add(x));
 
         return result;
+
+    }
+
+    @RequestMapping("/{partyid}")
+    public PartyInfo PartyInfogetPartyInfo(@PathVariable String partyid){
+
+        Party p = partyService.findById(partyid);
+
+        if(p == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+
+        return modelMapper.map(p, PartyInfo.class);
 
     }
 

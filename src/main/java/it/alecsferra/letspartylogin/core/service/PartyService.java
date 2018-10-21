@@ -12,4 +12,6 @@ public interface PartyService {
 
     void saveParty(Party party);
 
+    Party findById(String id);
+
 }

@@ -8,7 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table
@@ -42,5 +42,9 @@ public class Party {
     @NotBlank
     @Column
     private String province;
+
+    /*@ManyToMany
+    @Column
+    private Set<User> participants;*/
 
 }
