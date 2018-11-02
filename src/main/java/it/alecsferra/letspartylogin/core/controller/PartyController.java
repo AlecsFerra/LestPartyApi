@@ -4,6 +4,7 @@ import it.alecsferra.letspartylogin.core.Utils;
 import it.alecsferra.letspartylogin.core.model.dto.input.ThrowParty;
 import it.alecsferra.letspartylogin.core.model.dto.output.PartyInfo;
 import it.alecsferra.letspartylogin.core.model.dto.output.SimpleResult;
+import it.alecsferra.letspartylogin.core.model.dto.output.UserInfo;
 import it.alecsferra.letspartylogin.core.model.entity.Party;
 import it.alecsferra.letspartylogin.core.model.entity.User;
 import it.alecsferra.letspartylogin.core.service.PartyService;
@@ -78,7 +79,7 @@ public class PartyController {
     }
 
     @RequestMapping("/{partyid}")
-    public PartyInfo PartyInfogetPartyInfo(@PathVariable String partyid){
+    public PartyInfo getPartyInfo(@PathVariable String partyid){
 
         Party p = partyService.findById(partyid);
 
@@ -86,6 +87,69 @@ public class PartyController {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
 
         return modelMapper.map(p, PartyInfo.class);
+
+    }
+
+    @RequestMapping("/{partyid}/partecipants")
+    public UserInfo[] getPartyPartecipants(@PathVariable String partyid){
+
+        Party p = partyService.findById(partyid);
+
+        if(p == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+
+        return p.getParticipants()
+                .stream()
+                .map(x -> modelMapper.map(x, UserInfo.class))
+                .toArray(UserInfo[]::new);
+
+    }
+
+    @RequestMapping("/{partyid}/join")
+    public SimpleResult joinParty(@PathVariable String partyid){
+
+        SimpleResult simpleResult = new SimpleResult();
+
+        Party p = partyService.findById(partyid);
+
+        if(p == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+
+        if(!p.getParticipants().add(userService.findByUsername(Utils.getCurrentUsername()))){
+
+            simpleResult.setMessage("You already joined this party");
+            simpleResult.setSuccess(false);
+
+        }else
+            simpleResult.setSuccess(true);
+
+        partyService.saveParty(p);
+
+        return simpleResult;
+
+    }
+
+    @RequestMapping("/{partyid}/leave")
+    public SimpleResult leaveParty(@PathVariable String partyid){
+
+        SimpleResult simpleResult = new SimpleResult();
+
+        Party p = partyService.findById(partyid);
+
+        if(p == null)
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+
+        if(!p.getParticipants().remove(userService.findByUsername(Utils.getCurrentUsername()))){
+
+            simpleResult.setMessage("You weren't a participant to this party");
+            simpleResult.setSuccess(false);
+
+        }else
+            simpleResult.setSuccess(true);
+
+        partyService.saveParty(p);
+
+        return simpleResult;
 
     }
 

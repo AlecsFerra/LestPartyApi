@@ -43,8 +43,10 @@ public class Party {
     @Column
     private String province;
 
-    /*@ManyToMany
-    @Column
-    private Set<User> participants;*/
+    @ManyToMany
+    @JoinTable(name = "partecipants",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "party_id") })
+    private Set<User> participants;
 
 }
