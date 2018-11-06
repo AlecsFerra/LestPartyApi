@@ -84,6 +84,8 @@ public class PartyController {
         Party p = partyService.findById(partyid);
 
         if(p == null)
+
+
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
 
         return modelMapper.map(p, PartyInfo.class);

@@ -1,3 +1,4 @@
 # LestPartyApi
 
-Qualcosa
+TODO:
+    - 

@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -25,7 +26,7 @@ public class Party {
 
     @NotNull
     @Column
-    private String date;
+    private Date date;
 
     @ManyToOne
     @NotNull
